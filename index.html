@@ -820,6 +820,9 @@
 
             overlay.classList.add('active');
             document.body.style.overflow = 'hidden';
+
+            // Agrega estado al historial para atrapar el botón "atrás" del celu
+            history.pushState({modalOpen: true}, '', window.location.href);
         }
 
         function cerrarModal() {
@@ -828,9 +831,27 @@
             modalVideo.pause();
         }
 
-        document.getElementById('modalClose').addEventListener('click', cerrarModal);
+        // Interceptar el botón de retroceder del celular
+        window.addEventListener('popstate', function(event) {
+            if (overlay.classList.contains('active')) {
+                cerrarModal();
+            }
+        });
+
+        document.getElementById('modalClose').addEventListener('click', () => {
+            cerrarModal();
+            if (window.history.state && window.history.state.modalOpen) {
+                history.back();
+            }
+        });
+
         overlay.addEventListener('click', e => {
-            if (e.target === overlay) cerrarModal();
+            if (e.target === overlay) {
+                cerrarModal();
+                if (window.history.state && window.history.state.modalOpen) {
+                    history.back();
+                }
+            }
         });
 
         window.addEventListener('DOMContentLoaded', () => {
