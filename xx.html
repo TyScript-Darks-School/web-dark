@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DARK'S SCHOOL - Academia de Expertos</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #0a0a0f;
+            color: #e8e8f0;
+            line-height: 1.5;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        /* ===== SCROLLBAR ===== */
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0a0a0f;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #00f2fe, #c026d3);
+            border-radius: 10px;
+        }
+
+        /* ===== SCROLL PROGRESS ===== */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #00f2fe, #c026d3, #ff6a4b);
+            z-index: 9999;
+            transition: width 0.1s;
+            box-shadow: 0 0 8px rgba(0, 242, 254, 0.5);
+        }
+
+        /* ===== LOADING SCREEN ===== */
+        .loading-screen {
+            position: fixed;
+            inset: 0;
+            background: #0a0a0f;
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            transition: opacity 0.4s ease, visibility 0.4s ease;
+        }
+
+        .loading-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loading-icon {
+            width: 48px;
+            height: 48px;
+            border: 3px solid rgba(0, 242, 254, 0.2);
+            border-top-color: #00f2fe;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        .loading-text {
+            margin-top: 14px;
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            color: #00f2fe;
+            text-transform: uppercase;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* ===== CONTAINER ===== */
+        .container {
+            width: 100%;
+            max-width: 480px;
+            margin: 0 auto;
+            padding: 0 12px;
+        }
+
+        @media (min-width: 768px) {
+            .container {
+                max-width: 600px;
+            }
+        }
+
+        /* ===== HERO APP STYLE ===== */
+        .hero {
+            text-align: center;
+            padding: 24px 12px 16px;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            background: rgba(0, 242, 254, 0.08);
+            border: 1px solid rgba(0, 242, 254, 0.25);
+            border-radius: 20px;
+            font-size: 0.75rem;
+            color: #00f2fe;
+            margin-bottom: 12px;
+            letter-spacing: 0.5px;
+        }
+
+        .hero-title {
+            font-size: clamp(1.6rem, 5vw, 2.2rem);
+            font-weight: 800;
+            background: linear-gradient(135deg, #00f2fe, #c026d3);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 6px;
+            line-height: 1.1;
+        }
+
+        .hero-subtitle {
+            font-size: 0.85rem;
+            color: #777;
+            margin-bottom: 16px;
+        }
+
+        .hero-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid rgba(0, 242, 254, 0.4);
+            box-shadow: 0 0 20px rgba(0, 242, 254, 0.2);
+            display: block;
+            margin: 0 auto;
+        }
+
+        /* ===== FEED / LISTA DE CURSOS ===== */
+        .feed-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding-bottom: 30px;
+        }
+
+        /* ===== CARD DE CURSO ===== */
+        .course-card {
+            background: rgba(18, 18, 30, 0.9);
+            border: 1px solid rgba(0, 242, 254, 0.12);
+            border-radius: 14px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .course-card:active {
+            transform: scale(0.97);
+        }
+
+        @media (hover: hover) {
+            .course-card:hover {
+                border-color: rgba(0, 242, 254, 0.4);
+                box-shadow: 0 4px 20px rgba(0, 242, 254, 0.1);
+            }
+        }
+
+        .course-image-wrapper {
+            position: relative;
+            width: 100%;
+        }
+
+        .course-image {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+            display: block;
+            max-height: 240px;
+        }
+
+        .card-index {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: #00f2fe;
+            border: 1px solid rgba(0, 242, 254, 0.3);
+        }
+
+        .course-body {
+            padding: 12px;
+        }
+
+        .course-name {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .course-desc {
+            font-size: 0.8rem;
+            color: #888;
+            line-height: 1.4;
+            margin-bottom: 10px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .course-footer-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding-top: 8px;
+        }
+
+        .course-tags {
+            display: flex;
+            gap: 6px;
+        }
+
+        .course-card.locked {
+            opacity: 0.75;
+        }
+
+        .course-card.locked .tap-action {
+            color: #888;
+        }
+
+        .course-card.locked::after {
+            content: "Bloqueado";
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            padding: 5px 10px;
+            font-size: 0.7rem;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 999px;
+            color: #ccc;
+        }
+
+        .btn-primary:disabled {
+            background: rgba(255, 255, 255, 0.08);
+            color: #888;
+            cursor: not-allowed;
+        }
+
+        .tap-action {
+            font-size: 0.75rem;
+            color: #00f2fe;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        /* ===== MODAL TIPO SHEET ===== */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(6px);
+            z-index: 5000;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.25s ease, visibility 0.25s ease;
+        }
+
+        .modal-overlay.active {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .modal {
+            background: #11111a;
+            border-radius: 20px 20px 0 0;
+            width: 100%;
+            max-width: 480px;
+            max-height: 88vh;
+            overflow-y: auto;
+            border: 1px solid rgba(0, 242, 254, 0.2);
+            border-bottom: none;
+            transform: translateY(100%);
+            transition: transform 0.3s cubic-bezier(0.1, 0.9, 0.2, 1);
+        }
+
+        .modal-overlay.active .modal {
+            transform: translateY(0);
+        }
+
+        .modal-handle {
+            width: 32px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.25);
+            border-radius: 2px;
+            margin: 10px auto;
+        }
+
+        .modal-header {
+            padding: 0 16px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .modal-header h2 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .modal-close {
+            background: rgba(255, 255, 255, 0.06);
+            border: none;
+            color: #aaa;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-body {
+            padding: 16px;
+        }
+
+        .modal-image {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+            border-radius: 10px;
+            margin-bottom: 12px;
+            max-height: 360px;
+        }
+
+        .modal-section {
+            margin-bottom: 16px;
+        }
+
+        .modal-section h3 {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #00f2fe;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .modal-section p,
+        .modal-section li {
+            font-size: 0.85rem;
+            color: #bbb;
+            line-height: 1.5;
+        }
+
+        .modal-section ul {
+            list-style: none;
+        }
+
+        .modal-section ul li {
+            position: relative;
+            padding-left: 14px;
+            margin-bottom: 4px;
+        }
+
+        .modal-section ul li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: #c026d3;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .info-item {
+            background: rgba(0, 242, 254, 0.03);
+            border: 1px solid rgba(0, 242, 254, 0.08);
+            border-radius: 8px;
+            padding: 8px 10px;
+        }
+
+        .info-label {
+            font-size: 0.65rem;
+            color: #666;
+            text-transform: uppercase;
+            margin-bottom: 2px;
+        }
+
+        .info-value {
+            font-size: 0.85rem;
+            color: #ddd;
+            font-weight: 600;
+        }
+
+        /* ===== ESTILO DESTACADO PARA LA FUNDADORA (ABBY) ===== */
+        .founder-card {
+            background: linear-gradient(135deg, rgba(0, 242, 254, 0.1), rgba(192, 38, 211, 0.1));
+            border: 1px solid rgba(0, 242, 254, 0.4);
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 12px;
+            text-align: center;
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.15);
+        }
+
+        .founder-badge-title {
+            font-size: 0.7rem;
+            color: #00f2fe;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+
+        .founder-name {
+            font-size: 1.1rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #00f2fe, #c026d3);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* ===== ESTILO PARA PROFESORES ===== */
+        .teachers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 8px;
+            margin-top: 6px;
+        }
+
+        .teacher-badge {
+            background: linear-gradient(135deg, rgba(0, 242, 254, 0.05), rgba(192, 38, 211, 0.05));
+            border: 1px solid rgba(0, 242, 254, 0.15);
+            border-radius: 10px;
+            padding: 8px 10px;
+            font-size: 0.75rem;
+            color: #e2e8f0;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .teacher-badge:hover {
+            border-color: rgba(0, 242, 254, 0.4);
+            box-shadow: 0 0 10px rgba(0, 242, 254, 0.1);
+            transform: translateY(-1px);
+        }
+
+        .teacher-badge span {
+            color: #00f2fe;
+            font-size: 0.85rem;
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #00f2fe, #c026d3);
+            border: none;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 4px;
+        }
+
+        .btn-primary:active {
+            transform: scale(0.98);
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px 12px;
+            color: #444;
+            font-size: 0.75rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.03);
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- LOADING -->
+    <div class="loading-screen" id="loading">
+        <div class="loading-icon"></div>
+        <div class="loading-text">DARK'S SCHOOL</div>
+    </div>
+
+    <!-- SCROLL PROGRESS -->
+    <div class="scroll-progress" id="scrollProgress"></div>
+
+    <!-- HERO -->
+    <header class="hero">
+        <div class="container">
+            <span class="hero-badge">⚡ Academia</span>
+            <h1 class="hero-title">DARK'S SCHOOL</h1>
+            <p class="hero-subtitle">Selecciona un nivel y comienza</p>
+            <img src="https://i.ibb.co/Sw5Dnd99/20260406-013815.jpg" alt="Logo" class="hero-image">
+        </div>
+    </header>
+
+    <!-- LISTA ESTILO FEED -->
+    <main class="container">
+        <div class="feed-container" id="coursesGrid"></div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container">
+            DARK'S SCHOOL · 2026
+        </div>
+    </footer>
+
+    <!-- MODAL SHEET -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+            <div class="modal-handle"></div>
+            <div class="modal-header">
+                <h2 id="modalTitle">Curso</h2>
+                <button class="modal-close" id="modalClose">✕</button>
+            </div>
+            <div class="modal-body">
+                <img class="modal-image" id="modalImage" src="" alt="">
+                <p id="modalDesc" style="color:#aaa;margin-bottom:12px; font-size:0.85rem;"></p>
+
+                <div class="modal-section">
+                    <h3>Detalles</h3>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <div class="info-label">Instructor</div>
+                            <div class="info-value" id="modalInstructor"></div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Requisitos</div>
+                            <div class="info-value" id="modalReqs"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-section" id="modalGoalsSection">
+                    <h3>Objetivo</h3>
+                    <p id="modalGoals"></p>
+                </div>
+
+                <div class="modal-section" id="modalTopicsSection">
+                    <h3>Temas</h3>
+                    <ul id="modalTopics"></ul>
+                </div>
+
+                <div class="modal-section" id="modalVideoSection">
+                    <h3>Video Guía</h3>
+                    <video controls playsinline style="width:100%;border-radius:8px;margin-top:6px;" id="modalVideo"></video>
+                </div>
+
+                <div class="modal-section" id="modalTeachersSection">
+                    <h3>Equipo / Profesores</h3>
+                    <div id="founderContainer"></div>
+                    <div class="teachers-grid" id="modalTeachers"></div>
+                </div>
+
+                <button class="btn-primary" id="modalAction">Inscribirse</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const cursos = [
+            {
+                id: 1,
+                nombre: "NIVEL 1 - FUNDAMENTOS BIN",
+                imagen: "https://i.ibb.co/V00nt2rT/20260406-013631.jpg",
+                descripcion: "Aprende desde cero qué es un BIN, cómo funciona y cómo sacar tus propias cuentas con seguridad.",
+                duracion: "4 semanas",
+                instructor: "Dark Team",
+                requisitos: "Insignias durante todo el curso",
+                precio: "Gratis",
+                objetivos: "Aprender los fundamentos del sistema binario y su aplicación práctica. Dominar conversiones numéricas y lógica digital.",
+                temas: [
+                    "Introducción al sistema binario",
+                    "Conversión entre bases numéricas",
+                    "Operaciones lógicas básicas",
+                    "Aplicación en cuentas y lives"
+                ],
+                videoSrc: "Video/Dark.mp4",
+                fundadora: "Miss Abby 🌹",
+                profesores: [
+                    "Raimin",
+                    "Dulce",
+                    "Edom",
+                    "Luiz",
+                    "Victor",
+                    "Sergio",
+                    "Jandryb",
+                    "Felipe",
+                    "Scan_dal",
+                    "🐕 Óscar",
+                    "Julio César (bineo)",
+                    "Mary",
+                    "Jhonzito",
+                    "Matías",
+                    "Cesar"
+                ]
+            },
+            {
+                id: 2,
+                nombre: "NIVEL 2 - INTRODUCCIÓN IBAN",
+                imagen: "https://i.ibb.co/ZRsGww2t/20260406-013647.jpg",
+                descripcion: "Descubre la estructura de cuentas internacionales y aprende a validar IBAN de forma segura.",
+                duracion: "5 semanas",
+                instructor: "Dark Team",
+                requisitos: "Completar Nivel 1",
+                precio: "$50 USD",
+                objetivos: "Comprender los estándares internacionales de identificación bancaria y trabajar con sistemas de pagos seguros.",
+                temas: [
+                    "Estructura de cuentas bancarias",
+                    "Validación de IBAN",
+                    "Transacciones internacionales",
+                    "Integración con sistemas de pago"
+                ]
+            },
+            {
+                id: 3,
+                nombre: "NIVEL 3 - TERMINAL TERMUX",
+                imagen: "https://i.ibb.co/QFJ155JQ/20260406-013703.jpg",
+                descripcion: "Domina Termux, comandos, scripting y herramientas desde tu dispositivo móvil.",
+                duracion: "6 semanas",
+                instructor: "Dark Team",
+                requisitos: "Completar Nivel 2",
+                precio: "$75 USD",
+                objetivos: "Dominar el uso de Termux para desarrollo móvil y herramientas de seguridad.",
+                temas: [
+                    "Instalación y configuración",
+                    "Comandos de terminal",
+                    "Scripting bash avanzado",
+                    "Seguridad y prácticas éticas"
+                ]
+            },
+            {
+                id: 4,
+                nombre: "NIVEL 4 - EDICIÓN PROFESIONAL",
+                imagen: "https://i.ibb.co/1GZyGcj5/20260406-013941.jpg",
+                descripcion: "Conviértete en un editor completo: vídeo, diseño, efectos y motion graphics.",
+                duracion: "8 semanas",
+                instructor: "Dark Team",
+                requisitos: "Completar Nivel 3",
+                precio: "$90 USD",
+                objetivos: "Crear contenido visual de alto impacto para plataformas digitales.",
+                temas: [
+                    "Edición de vídeo avanzada",
+                    "Diseño gráfico y color grading",
+                    "Efectos visuales y sonido",
+                    "Animaciones y presentaciones"
+                ]
+            },
+            {
+                id: 5,
+                nombre: "CERTIFICACIÓN - GRADUADOS",
+                imagen: "https://i.ibb.co/wh22JfBf/IMG-20260119-WA0471-2.jpg",
+                descripcion: "Reconocimiento para todos los que culminaron los niveles con éxito.",
+                duracion: "Permanente",
+                instructor: "Dark Team",
+                requisitos: "Completar Nivel 4",
+                precio: "Incluido",
+                objetivos: "Obtener tu certificación oficial y acceso a la comunidad exclusiva.",
+                temas: [
+                    "Proyecto final integrador",
+                    "Evaluación y defensa",
+                    "Certificado digital",
+                    "Comunidad de graduados"
+                ]
+            }
+        ];
+
+        function renderCursos() {
+            const grid = document.getElementById('coursesGrid');
+            grid.innerHTML = '';
+
+            cursos.forEach((curso, i) => {
+                const card = document.createElement('div');
+                card.className = `course-card fade-in${curso.id !== 1 ? ' locked' : ''}`;
+                card.style.transitionDelay = `${i * 50}ms`;
+                card.innerHTML = `
+                    <div class="course-image-wrapper">
+                        <span class="card-index">0${i + 1}</span>
+                        <img class="course-image" src="${curso.imagen}" alt="${curso.nombre}" loading="lazy">
+                    </div>
+                    <div class="course-body">
+                        <h3 class="course-name">${curso.nombre}</h3>
+                        <p class="course-desc">${curso.descripcion}</p>
+                        <div class="course-footer-info">
+                            <div class="course-tags"></div>
+                            <span class="tap-action">${curso.id === 1 ? 'Ver más ➔' : 'Nivel bloqueado'}</span>
+                        </div>
+                    </div>
+                `;
+                card.addEventListener('click', () => abrirModal(curso));
+                grid.appendChild(card);
+            });
+        }
+
+        const overlay = document.getElementById('modalOverlay');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalImage = document.getElementById('modalImage');
+        const modalDesc = document.getElementById('modalDesc');
+        const modalInstructor = document.getElementById('modalInstructor');
+        const modalReqs = document.getElementById('modalReqs');
+        const modalGoals = document.getElementById('modalGoals');
+        const modalTopics = document.getElementById('modalTopics');
+        const modalVideo = document.getElementById('modalVideo');
+        const founderContainer = document.getElementById('founderContainer');
+        const modalTeachers = document.getElementById('modalTeachers');
+        const modalAction = document.getElementById('modalAction');
+
+        function abrirModal(c) {
+            modalTitle.textContent = c.nombre;
+            modalImage.src = c.imagen;
+            modalDesc.textContent = c.descripcion;
+            modalInstructor.textContent = c.instructor;
+            modalReqs.textContent = c.requisitos;
+            modalGoals.textContent = c.objetivos || '';
+
+            modalTopics.innerHTML = c.temas.map(t => `<li>${t}</li>`).join('');
+            
+            if (c.profesores) {
+                document.getElementById('modalTeachersSection').style.display = 'block';
+                
+                if (c.fundadora) {
+                    founderContainer.innerHTML = `
+                        <div class="founder-card">
+                            <div class="founder-badge-title">👑 Fundadora de Dark's School</div>
+                            <div class="founder-name">${c.fundadora}</div>
+                        </div>
+                    `;
+                } else {
+                    founderContainer.innerHTML = '';
+                }
+
+                modalTeachers.innerHTML = c.profesores.map(p => `
+                    <div class="teacher-badge">
+                        <span>✦</span> ${p}
+                    </div>
+                `).join('');
+            } else {
+                document.getElementById('modalTeachersSection').style.display = 'none';
+                founderContainer.innerHTML = '';
+            }
+
+            if (c.videoSrc) {
+                document.getElementById('modalVideoSection').style.display = 'block';
+                modalVideo.src = c.videoSrc;
+            } else {
+                document.getElementById('modalVideoSection').style.display = 'none';
+            }
+
+            modalAction.textContent = c.id === 1 ? '⚡ Ingresar Ahora' : `🔒 Completa Nivel ${c.id - 1}`;
+            modalAction.dataset.id = c.id;
+            modalAction.disabled = c.id !== 1;
+
+            if (c.id !== 1) {
+                modalReqs.textContent = `Completa Nivel ${c.id - 1} para desbloquear este nivel.`;
+            }
+
+            overlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function cerrarModal() {
+            overlay.classList.remove('active');
+            document.body.style.overflow = '';
+            modalVideo.pause();
+        }
+
+        document.getElementById('modalClose').addEventListener('click', cerrarModal);
+        overlay.addEventListener('click', e => {
+            if (e.target === overlay) cerrarModal();
+        });
+
+        modalAction.addEventListener('click', function() {
+            alert("¡Registro realizado con éxito!");
+            cerrarModal();
+        });
+
+        window.addEventListener('DOMContentLoaded', () => {
+            renderCursos();
+            setTimeout(() => {
+                document.getElementById('loading').classList.add('hidden');
+                document.querySelectorAll('.fade-in').forEach(el => el.classList.add('visible'));
+            }, 300);
+        });
+
+        window.addEventListener('scroll', () => {
+            const winScroll = document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById('scrollProgress').style.width = scrolled + '%';
+        });
+    </script>
+</body>
+</html>
