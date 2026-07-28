@@ -229,6 +229,7 @@
             margin-bottom: 10px;
             display: -webkit-box;
             -webkit-line-clamp: 2;
+            line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
         }
@@ -506,6 +507,9 @@
             text-transform: uppercase;
             letter-spacing: 0.5px;
             margin-top: 4px;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
         }
 
         .btn-primary:active {
@@ -612,7 +616,7 @@
                     <div class="teachers-grid" id="modalTeachers"></div>
                 </div>
 
-                <button class="btn-primary" id="modalAction">Inscribirse</button>
+                <div id="modalActionContainer"></div>
             </div>
         </div>
     </div>
@@ -631,9 +635,9 @@
                 objetivos: "Aprender los fundamentos del sistema binario y su aplicación práctica. Dominar conversiones numéricas y lógica digital.",
                 temas: [
                     "Introducción al sistema binario",
-                    "Conversión entre bases numéricas",
-                    "Operaciones lógicas básicas",
-                    "Aplicación en cuentas y lives"
+                    "Extrapolacion de bin",
+                    "Prime video",
+                    "Sacar live manual"
                 ],
                 videoSrc: "Video/Dark.mp4",
                 fundadora: "Miss Abby 🌹",
@@ -662,7 +666,7 @@
                 descripcion: "Descubre la estructura de cuentas internacionales y aprende a validar IBAN de forma segura.",
                 duracion: "5 semanas",
                 instructor: "Dark Team",
-                requisitos: "Completar Nivel 1",
+                requisitos: "Completa Nivel 1",
                 precio: "$50 USD",
                 objetivos: "Comprender los estándares internacionales de identificación bancaria y trabajar con sistemas de pagos seguros.",
                 temas: [
@@ -679,7 +683,7 @@
                 descripcion: "Domina Termux, comandos, scripting y herramientas desde tu dispositivo móvil.",
                 duracion: "6 semanas",
                 instructor: "Dark Team",
-                requisitos: "Completar Nivel 2",
+                requisitos: "Completa Nivel 2",
                 precio: "$75 USD",
                 objetivos: "Dominar el uso de Termux para desarrollo móvil y herramientas de seguridad.",
                 temas: [
@@ -696,7 +700,7 @@
                 descripcion: "Conviértete en un editor completo: vídeo, diseño, efectos y motion graphics.",
                 duracion: "8 semanas",
                 instructor: "Dark Team",
-                requisitos: "Completar Nivel 3",
+                requisitos: "Completa Nivel 3",
                 precio: "$90 USD",
                 objetivos: "Crear contenido visual de alto impacto para plataformas digitales.",
                 temas: [
@@ -713,7 +717,7 @@
                 descripcion: "Reconocimiento para todos los que culminaron los niveles con éxito.",
                 duracion: "Permanente",
                 instructor: "Dark Team",
-                requisitos: "Completar Nivel 4",
+                requisitos: "Completa Nivel 4",
                 precio: "Incluido",
                 objetivos: "Obtener tu certificación oficial y acceso a la comunidad exclusiva.",
                 temas: [
@@ -763,7 +767,7 @@
         const modalVideo = document.getElementById('modalVideo');
         const founderContainer = document.getElementById('founderContainer');
         const modalTeachers = document.getElementById('modalTeachers');
-        const modalAction = document.getElementById('modalAction');
+        const modalActionContainer = document.getElementById('modalActionContainer');
 
         function abrirModal(c) {
             modalTitle.textContent = c.nombre;
@@ -806,11 +810,10 @@
                 document.getElementById('modalVideoSection').style.display = 'none';
             }
 
-            modalAction.textContent = c.id === 1 ? '⚡ Ingresar Ahora' : `🔒 Completa Nivel ${c.id - 1}`;
-            modalAction.dataset.id = c.id;
-            modalAction.disabled = c.id !== 1;
-
-            if (c.id !== 1) {
+            if (c.id === 1) {
+                modalActionContainer.innerHTML = `<a href="https://chat.whatsapp.com/HJjHbKygXwu3jPW8Gq0Tcq" target="_blank" class="btn-primary">⚡ Ingresar Ahora</a>`;
+            } else {
+                modalActionContainer.innerHTML = `<button class="btn-primary" disabled style="background: rgba(255, 255, 255, 0.08); color: #888; cursor: not-allowed;">🔒 Completa Nivel ${c.id - 1}</button>`;
                 modalReqs.textContent = `Completa Nivel ${c.id - 1} para desbloquear este nivel.`;
             }
 
@@ -827,11 +830,6 @@
         document.getElementById('modalClose').addEventListener('click', cerrarModal);
         overlay.addEventListener('click', e => {
             if (e.target === overlay) cerrarModal();
-        });
-
-        modalAction.addEventListener('click', function() {
-            alert("¡Registro realizado con éxito!");
-            cerrarModal();
         });
 
         window.addEventListener('DOMContentLoaded', () => {
