@@ -185,14 +185,22 @@
         .course-image-wrapper {
             position: relative;
             width: 100%;
+            height: 220px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(180deg, rgba(0,0,0,0.05), rgba(0,0,0,0.02));
         }
 
         .course-image {
-            width: 100%;
-            height: auto;
+            max-width: 100%;
+            max-height: 100%;
             object-fit: contain;
             display: block;
-            max-height: 240px;
+        }
+
+        @media (max-width: 480px) {
+            .course-image-wrapper { height: 160px; }
         }
 
         .card-index {
@@ -267,12 +275,6 @@
             border: 1px solid rgba(255, 255, 255, 0.12);
             border-radius: 999px;
             color: #ccc;
-        }
-
-        .btn-primary:disabled {
-            background: rgba(255, 255, 255, 0.08);
-            color: #888;
-            cursor: not-allowed;
         }
 
         .tap-action {
@@ -433,7 +435,7 @@
             font-weight: 600;
         }
 
-        /* ===== ESTILO DESTACADO PARA LA FUNDADORA (ABBY) ===== */
+        /* ===== ESTILO DESTACADO PARA LA FUNDADORA ===== */
         .founder-card {
             background: linear-gradient(135deg, rgba(0, 242, 254, 0.1), rgba(192, 38, 211, 0.1));
             border: 1px solid rgba(0, 242, 254, 0.4);
@@ -626,106 +628,204 @@
         const cursos = [
             {
                 id: 1,
-                nombre: "NIVEL 1 - FUNDAMENTOS BIN",
+                nombre: "NIVEL 1 - BINEO E IBAN",
                 imagen: "https://i.ibb.co/V00nt2rT/20260406-013631.jpg",
-                descripcion: "Aprende desde cero qué es un BIN, cómo funciona y cómo sacar tus propias cuentas con seguridad.",
+                descripcion: "Aprende los fundamentos del bineo, extrapolación y estructura de cuentas internacionales IBAN.",
                 duracion: "4 semanas",
                 instructor: "Dark Team",
                 requisitos: "Insignias durante todo el curso",
                 precio: "Gratis",
-                objetivos: "Aprender los fundamentos del sistema binario y su aplicación práctica. Dominar conversiones numéricas y lógica digital.",
+                objetivos: "Dominar la lógica del bineo, generación/validación de cuentas y estructura bancaria internacional.",
                 temas: [
-                    "Introducción al sistema binario",
-                    "Extrapolacion de bin",
-                    "Prime video",
-                    "Sacar live manual"
+                    "Introducción al sistema BIN e IBAN",
+                    "Extrapolación de BIN",
+                    "Prime Video & Streaming",
+                    "Sacar Live Manual",
+                    "Validación y transacciones seguras"
                 ],
                 videoSrc: "Video/Dark.mp4",
                 fundadora: "Miss Abby 🌹",
                 profesores: [
-                    "Raimin",
-                    "Dulce",
-                    "Edom",
-                    "Luiz",
-                    "Victor",
-                    "Sergio",
-                    "Jandryb",
-                    "Felipe",
-                    "Scan_dal",
-                    "🐕 Óscar",
-                    "Julio César (bineo)",
-                    "Mary",
-                    "Jhonzito",
-                    "Matías",
-                    "Cesar"
+                    "Raimin", "Dulce", "Edom", "Luiz", "Victor", 
+                    "Sergio", "Jandryb", "Felipe", "Scan_dal", "🐕 Óscar", 
+                    "Julio César (bineo)", "Mary", "Jhonzito", "Matías", "Cesar🇩🇴", "ARCANGEL"
                 ]
             },
             {
                 id: 2,
-                nombre: "NIVEL 2 - INTRODUCCIÓN IBAN",
-                imagen: "https://i.ibb.co/ZRsGww2t/20260406-013647.jpg",
-                descripcion: "Descubre la estructura de cuentas internacionales y aprende a validar IBAN de forma segura.",
+                nombre: "NIVEL 2 - TERMINAL TERMUX",
+                imagen: "imagen/termux.jfif",
+                descripcion: "Domina Termux, entornos Linux, comandos, scripting Bash y paquetes desde tu móvil.",
                 duracion: "5 semanas",
                 instructor: "Dark Team",
                 requisitos: "Completa Nivel 1",
-                precio: "$50 USD",
-                objetivos: "Comprender los estándares internacionales de identificación bancaria y trabajar con sistemas de pagos seguros.",
+                precio: "Gratis",
+                objetivos: "Manejar la terminal de comandos de Android con fluidez y automatizar tareas mediante scripts.",
                 temas: [
-                    "Estructura de cuentas bancarias",
-                    "Validación de IBAN",
-                    "Transacciones internacionales",
-                    "Integración con sistemas de pago"
+                    "Instalación y repositorios principales",
+                    "Comandos esenciales de Linux/Bash",
+                    "Gestión de paquetes y entornos virtuales",
+                    "Scripting básico e intermedio"
+                ],
+                profesores: [
+                    "Raimin", "Dulce", "Luiz", "Felipe", "Scan_dal", "🐕 Óscar", "Jandryb", "Mary", "Matías"
                 ]
             },
             {
                 id: 3,
-                nombre: "NIVEL 3 - TERMINAL TERMUX",
-                imagen: "https://i.ibb.co/QFJ155JQ/20260406-013703.jpg",
-                descripcion: "Domina Termux, comandos, scripting y herramientas desde tu dispositivo móvil.",
+                nombre: "NIVEL 3 - EDICIÓN PROFESIONAL",
+                imagen: "imagen/edicion.jfif",
+                descripcion: "Conviértete en editor: edición visual, diseño, VFX y desarrollo creativo de contenido.",
                 duracion: "6 semanas",
                 instructor: "Dark Team",
                 requisitos: "Completa Nivel 2",
-                precio: "$75 USD",
-                objetivos: "Dominar el uso de Termux para desarrollo móvil y herramientas de seguridad.",
+                precio: "Gratis",
+                objetivos: "Dominar herramientas de edición de video e imagen para plataformas digitales.",
                 temas: [
-                    "Instalación y configuración",
-                    "Comandos de terminal",
-                    "Scripting bash avanzado",
-                    "Seguridad y prácticas éticas"
+                    "Montaje y cortes profesionales",
+                    "Color Grading y corrección de color",
+                    "Motion Graphics y efectos",
+                    "Diseño multiformato"
+                ],
+                profesores: [
+                    "Dulce", "Mary (nivel intermedio)", "CARS", "OMEY"
                 ]
             },
             {
                 id: 4,
-                nombre: "NIVEL 4 - EDICIÓN PROFESIONAL",
-                imagen: "https://i.ibb.co/1GZyGcj5/20260406-013941.jpg",
-                descripcion: "Conviértete en un editor completo: vídeo, diseño, efectos y motion graphics.",
-                duracion: "8 semanas",
+                nombre: "NIVEL 4 -IPTV",
+                imagen: "imagen/iptv.jfif",
+                descripcion: "Configuración, protocolos de transmisión, gestión de listas y servidores de IPTV.",
+                duracion: "4 semanas",
                 instructor: "Dark Team",
                 requisitos: "Completa Nivel 3",
-                precio: "$90 USD",
-                objetivos: "Crear contenido visual de alto impacto para plataformas digitales.",
+                precio: "Gratis",
+                objetivos: "Entender el ecosistema IPTV, clientes m3u, Xtream Codes y servidores de retransmisión.",
                 temas: [
-                    "Edición de vídeo avanzada",
-                    "Diseño gráfico y color grading",
-                    "Efectos visuales y sonido",
-                    "Animaciones y presentaciones"
+                    "Fundamentos de streaming e IPTV",
+                    "Formatos M3U, M3U8 y Xtream UI",
+                    "Gestión de reproductores y clientes",
+                    "Optimización de redes y transmisión"
+                ],
+                profesores: [
+                    "Dulce", "Raimin", "Victor", "Felipe", "Scan_dal", "Tyscript", "Mauri"
                 ]
             },
             {
                 id: 5,
-                nombre: "CERTIFICACIÓN - GRADUADOS",
-                imagen: "https://i.ibb.co/wh22JfBf/IMG-20260119-WA0471-2.jpg",
-                descripcion: "Reconocimiento para todos los que culminaron los niveles con éxito.",
-                duracion: "Permanente",
+                nombre: "NIVEL 5 - OPENBULLET & PARSING",
+                imagen: "https://i.ibb.co/V00nt2rT/20260406-013631.jpg",
+                descripcion: "Manejo de OpenBullet, construcción de configs, proxies y peticiones HTTP.",
+                duracion: "5 semanas",
                 instructor: "Dark Team",
                 requisitos: "Completa Nivel 4",
-                precio: "Incluido",
-                objetivos: "Obtener tu certificación oficial y acceso a la comunidad exclusiva.",
+                precio: "Gratis",
+                objetivos: "Aprender a realizar pruebas de peticiones HTTP, manejo de expresiones regulares y capturas.",
                 temas: [
-                    "Proyecto final integrador",
-                    "Evaluación y defensa",
-                    "Certificado digital",
-                    "Comunidad de graduados"
+                    "Introducción a OpenBullet / Anomaly",
+                    "Estructura de peticiones HTTP (GET, POST)",
+                    "Uso de Regex y LoliCode",
+                    "Manejo de Proxies y Runner"
+                ],
+                profesores: [
+                    "PAULA", "Dulce", "JHONZITO"
+                ]
+            },
+            {
+                id: 6,
+                nombre: "NIVEL 6 - KODI & MULTIMEDIA",
+                imagen: "imagen/kodi.jfif",
+                descripcion: "Configuración avanzada del centro multimedia Kodi, addons, builds y wizard.",
+                duracion: "3 semanas",
+                instructor: "Dark Team",
+                requisitos: "Completa Nivel 5",
+                precio: "Gratis",
+                objetivos: "Crear y personalizar centros multimedia con addons y dependencias actualizadas.",
+                temas: [
+                    "Instalación y arquitectura de Kodi",
+                    "Instalación de Addons y Fuentes",
+                    "Configuración de Builds personalizadas",
+                    "Mantenimiento de dependencias"
+                ],
+                profesores: [
+                    "Miguel"
+                ]
+            },
+            {
+                id: 7,
+                nombre: "NIVEL 7 - DESARROLLO PÁGINAS WEB",
+                imagen: "imagen/pagina.jfif",
+                descripcion: "Aprende a diseñar, estructurar y publicar tu propio sitio web responsivo.",
+                duracion: "6 semanas",
+                instructor: "Dark Team",
+                requisitos: "Completa Nivel 6",
+                precio: "Gratis",
+                objetivos: "Crear páginas web desde cero usando HTML5, CSS3, JavaScript y despliegue en servidor.",
+                temas: [
+                    "Estructura HTML5 y maquetación CSS3",
+                    "Diseño Adaptativo (Responsive Design)",
+                    "Lógica frontend con JavaScript",
+                    "Despliegue de hosting y dominios"
+                ],
+                profesores: [
+                    "CONSULTORA"
+                ]
+            },
+            {
+                id: 8,
+                nombre: "NIVEL 8 - CREACIÓN DE APK",
+                imagen: "imagen/apk.jfif",
+                descripcion: "Desarrollo, modificación, descompilación y firma de aplicaciones Android (APK).",
+                duracion: "6 semanas",
+                instructor: "Dark Team",
+                requisitos: "Completa Nivel 7",
+                precio: "Gratis",
+                objetivos: "Aprender el ciclo de desarrollo, modificación de código Smali y compilación de APKs.",
+                temas: [
+                    "Estructura interna de un archivo APK",
+                    "Herramientas de descompilación (APKTool, MT Manager)",
+                    "Edición de Smali, XML y recursos",
+                    "Firma e instalación de paquetes"
+                ],
+                profesores: [
+                    "CONSULTORA", "PERUCHO"
+                ]
+            },
+            {
+                id: 9,
+                nombre: "NIVEL 9 - AUDITORÍA WIFI 🛜",
+                imagen: "imagen/hacking.jfif",
+                descripcion: "Análisis de redes inalámbricas, protocolos de seguridad WPA/WPA2/WPA3 y auditoría.",
+                duracion: "4 semanas",
+                instructor: "Dark Team",
+                requisitos: "Completa Nivel 8",
+                precio: "Gratis",
+                objetivos: "Comprender los estándares de seguridad de redes inalámbricas y sus vulnerabilidades.",
+                temas: [
+                    "Fundamentos de redes 802.11",
+                    "Modos de monitoreo e inyección",
+                    "Análisis de tráfico de paquetes",
+                    "Aseguramiento y hardening de redes"
+                ],
+                profesores: [
+                    "SANTIAGO", "JHON", "Tyscript"
+                ]
+            },
+            {
+                id: 10,
+                nombre: "CERTIFICACIÓN - GRADUADOS",
+                imagen: "imagen/graduados.jfif",
+                descripcion: "Reconocimiento final para todos los alumnos que culminaron la ruta completa de cursos.",
+                duracion: "Permanente",
+                instructor: "Dark Team",
+                requisitos: "Completa Nivel 9",
+                precio: "Incluido",
+                objetivos: "Obtener tu certificación oficial de la academia y acceso definitivo a la comunidad élite.",
+                temas: [
+                    "Proyecto integrador final",
+                    "Evaluación global de habilidades",
+                    "Entrega de certificado digital",
+                    "Acceso al grupo exclusivo de graduados"
                 ]
             }
         ];
@@ -740,7 +840,7 @@
                 card.style.transitionDelay = `${i * 50}ms`;
                 card.innerHTML = `
                     <div class="course-image-wrapper">
-                        <span class="card-index">0${i + 1}</span>
+                        <span class="card-index">${i + 1 < 10 ? '0' + (i + 1) : (i + 1)}</span>
                         <img class="course-image" src="${curso.imagen}" alt="${curso.nombre}" loading="lazy">
                     </div>
                     <div class="course-body">
@@ -812,7 +912,7 @@
             }
 
             if (c.id === 1) {
-            modalActionContainer.innerHTML = `<a href="https://chat.whatsapp.com/JIy98MpVSM965LbLz4YcZI" target="_blank" class="btn-primary">⚡ Ingresar Ahora</a>`;
+                modalActionContainer.innerHTML = `<a href="https://chat.whatsapp.com/JIy98MpVSM965LbLz4YcZI" target="_blank" class="btn-primary">⚡ Ingresar Ahora</a>`;
             } else {
                 modalActionContainer.innerHTML = `<button class="btn-primary" disabled style="background: rgba(255, 255, 255, 0.08); color: #888; cursor: not-allowed;">🔒 Completa Nivel ${c.id - 1}</button>`;
                 modalReqs.textContent = `Completa Nivel ${c.id - 1} para desbloquear este nivel.`;
@@ -821,7 +921,6 @@
             overlay.classList.add('active');
             document.body.style.overflow = 'hidden';
 
-            // Agrega estado al historial para atrapar el botón "atrás" del celu
             history.pushState({modalOpen: true}, '', window.location.href);
         }
 
@@ -831,7 +930,6 @@
             modalVideo.pause();
         }
 
-        // Interceptar el botón de retroceder del celular
         window.addEventListener('popstate', function(event) {
             if (overlay.classList.contains('active')) {
                 cerrarModal();
